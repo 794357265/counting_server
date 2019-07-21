@@ -16,13 +16,13 @@ import javax.servlet.http.HttpServletResponse;
  *
  */
 @Controller
-public class ItemController{
+public class ItemController extends BaseController{
 	
 	@Autowired
 	private ItemService itemService;
 
 	@RequestMapping("/queryItem")
-    @ResponseBody
+	@ResponseBody
 	public CommonReturnType queryItem(HttpServletRequest request,HttpServletResponse response) {
 		System.out.println("queryItem!");
         String name = request.getParameter("name");
