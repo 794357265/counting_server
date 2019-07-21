@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyb.mapper.TypeMapper">
+
+	<select id="getTypes" resultType="type">
+		select * from type
+	</select>
+	
+	<update id="updateType" parameterType="type">
+		update type set t_name = #{t_name} where id = #{id}
+	</update>
+	
+	<delete id="deleteType" parameterType="int">
+		delete from type where id = #{value}
+	</delete>
+	
+	<select id="getUsers" resultType="user">
+		select * from user
+	</select>
+
+		
+</mapper>

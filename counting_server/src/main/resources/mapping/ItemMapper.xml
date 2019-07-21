@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyb.mapper.ItemMapper">
+	<insert id="insertItem" parameterType="item" >
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			select LAST_INSERT_ID()
+		</selectKey>
+		<choose>
+            <when test="type_id != null and type_id != ''">
+            	insert into item(remark, user_Id, type_id, date,price) values(#{remark},#{user_id},#{type_id},#{date},#{price});
+            </when>
+            <otherwise>
+                insert into item(remark, user_Id, date,price) values(#{remark},#{user_id},#{date},#{price});
+            </otherwise>
+        </choose>
+	</insert>
+	
+	<select id="getItems" parameterType="item" resultType="itemVo">
+		select i.*,u.u_name,t.t_name from item i,user u, type t where i.user_id = u.id and i.type_id = t.id 
+		<if test="user_id != null and user_id != ''">and i.user_id = #{user_id}</if>
+		<if test="type_id != null and type_id != ''">and i.type_id = #{type_id}</if>
+		<if test="remark != null and remark != ''">and i.remark like concat('%',#{remark},'%') </if>
+		<choose>
+            <when test="date != null and date != ''">
+            	and i.date = #{date}
+            </when>
+            <otherwise>
+                <if test="start_date != null and start_date != ''">and i.date &gt;= #{start_date}</if>
+                <if test="end_date != null and end_date != ''">and i.date &lt;= #{end_date}</if>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="price != null and price != ''">
+            	and i.price = #{price}
+            </when>
+            <otherwise>
+                <if test="start_price != null and start_price != ''">and i.price &gt; #{start_price}</if>
+                <if test="end_price != null and end_price != ''">and i.price &lt; #{end_price}</if>
+            </otherwise>
+        </choose>
+        order by i.date desc
+	</select>
+	
+	<update id="updateItemById" parameterType="item">
+		<if test="id != null and id != ''">update item set remark = #{remark} , price = #{price} , date = #{date} , user_id = #{user_id} ,type_id = #{type_id} where id = #{id}</if>
+	</update>
+	
+	<delete id="deleteItemById" parameterType="int">
+		delete from item where id = #{value}
+	</delete>
+	
+	<select id="getItemById" parameterType="int" resultType="itemVo">
+		select i.*,u.u_name,t.t_name from item i,user u,type t where i.id = #{value} and u.id = i.user_id and t.id = i.type_id
+	</select>
+	
+</mapper>

@@ -1,28 +1,26 @@
 package com.zyb.response;
 
+import com.alibaba.fastjson.JSONObject;
+
 public class CommonReturnType {
 
-    private String status;
+    private int code;
     private Object data;
 
     public static CommonReturnType create(Object result){
-        return CommonReturnType.create(result,"success");
+        return CommonReturnType.create(result,20000);
     }
 
-    public static CommonReturnType create(Object result, String status){
+    public static CommonReturnType create(Object result, int code){
         CommonReturnType type = new CommonReturnType();
         type.setData(result);
-        type.setStatus(status);
+        type.setCode(code);
         return type;
     }
 
-    public String getStatus() {
-        return status;
-    }
+    public int getCode() {return code;}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public void setCode(int code) {this.code = code;}
 
     public Object getData() {
         return data;
@@ -30,5 +28,9 @@ public class CommonReturnType {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    public String toJson(){
+        return JSONObject.toJSONString(this);
     }
 }
